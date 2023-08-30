@@ -3,18 +3,11 @@ import globalStylesUrl from "~/styles/global.css"
 
 export const links = () => [{ rel: "stylesheet", href: globalStylesUrl }]
 
-// export const meta: MetaFunction = () => ({
-//   description: "A cool blog built with Remix",
-//   keywords: "remix, react, javascript",
-// })
-
 export const meta = () => {
   const description = "A cool blog built with Remix"
   const keywords = "remix, react, javascript"
 
-  return [{
-    description
-  }, {keywords}]
+  return [{ description, keywords }]
 }
 
 export default function App() {
