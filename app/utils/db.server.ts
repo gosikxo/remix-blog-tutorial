@@ -17,4 +17,4 @@ if (process.env.NODE_ENV === "production") {
   db = global.__db
 }
 
-export { db }
+export {db}
