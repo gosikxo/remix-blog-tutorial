@@ -12,6 +12,10 @@ function validateBody(body) {
     return "Body should be at least 10 characters long"
 }
 
+function badRequest(data) {
+  return json(data, { status: 400 })
+}
+
 export const action = async ({ request }) => {
   const form = await request.formData()
   const title = form.get("title")
@@ -26,7 +30,7 @@ export const action = async ({ request }) => {
 
   if (Object.values(fieldErrors).some(Boolean)) {
     console.log(fieldErrors)
-    return json({ fields, fieldErrors }, { status: 400 })
+    return badRequest({ fields, fieldErrors })
   }
 
   const post = await db.post.create({ data: fields })
