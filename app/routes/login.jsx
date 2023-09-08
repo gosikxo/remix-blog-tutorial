@@ -1,7 +1,8 @@
 import { json } from "@remix-run/node"
 import { useActionData } from "@remix-run/react"
 import React from "react"
-import { login, createUserSession } from "~/utils/session.server"
+import { login, createUserSession, register } from "~/utils/session.server"
+import { db } from "../utils/db.server"
 
 function badRequest(data) {
   return json(data, { status: 400 })
@@ -46,6 +47,25 @@ export const action = async ({ request }) => {
       return createUserSession(user.id, "/posts")
     }
     case "register": {
+      const userExists = await db.user.findFirst({
+        where: { username },
+      })
+      if (userExists) {
+        return badRequest({
+          fields,
+          fieldErrors: { username: `User ${username} already exists` },
+        })
+      }
+
+      const user = await register({ username, password })
+      if (!user) {
+        return badRequest({
+          fields,
+          formError: "Something went wrong.",
+        })
+      }
+
+      return createUserSession(user.id, "/posts")
     }
     default: {
       return badRequest({ fields, formError: "Login type is not valid" })
